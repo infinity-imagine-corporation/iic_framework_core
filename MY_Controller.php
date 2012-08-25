@@ -41,16 +41,6 @@ class IIC_Controller extends MX_Controller {
 							TRUE, 
 							'application/modules/backoffice/'
 						 );
-
-		header("Access-Control-Allow-Headers: origin, x-requested-with, content-type, passkey, securitycode");
-		
-		if(@strpos(strtolower($_SERVER['HTTP_USER_AGENT']),"iphone") !== FALSE &&
-		@$_SERVER['HTTP_SECURITYCODE'] == '81f1862870db29afb5ae2fdc758b44ef' &&
-		@$_SERVER['HTTP_PASSKEY'] == 'SESS096cf4090662b7305aeafae8af3f18a3=3cGJDTAVT28X6r0kNTETDr-6KeYTQVL0cbBZYbEfDFc'
-		) 
-		{
-			header("Access-Control-Allow-Origin: *");
-		}
 	}
 	
 	// ------------------------------------------------------------------------
