@@ -13,6 +13,8 @@ class MY_Controller extends MX_Controller {
     }
 }
 
+// ------------------------------------------------------------------------
+
 class IIC_Controller extends MX_Controller {
 	
 	protected $module_config = array(

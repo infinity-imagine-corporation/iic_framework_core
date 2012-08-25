@@ -1,4 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class MY_Model extends CI_model {
 	
     public function __construct()
@@ -6,6 +7,8 @@ class MY_Model extends CI_model {
         parent::__construct();
     }
 }
+
+// --------------------------------------------------------------------------
 
 class IIC_Model extends MY_Model {
 	
