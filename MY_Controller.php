@@ -88,9 +88,33 @@ class IIC_Controller extends MX_Controller {
 	 * @return	json
 	 */
 	  
-	function list_content($limit = 25, $offset = 0)
-	{		
-		echo json_encode($this->content_model->list_content($limit, $offset));	
+    function list_content($limit = 25, $offset = 0, $select = NULL, $where = NULL, $order_by = NULL, $order_direction = 'ASC')
+	{
+		$limit = ($this->input->post('limit')) ? $this->input->post('limit') : $limit;
+		$offset = ($this->input->post('offset')) ? $this->input->post('offset') : $offset;
+		$select = ($this->input->post('select')) ? $this->input->post('select') : $select;
+		$where = ($this->input->post('where')) ? $this->input->post('where') : $where;
+		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
+		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
+		
+		echo json_encode($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));	
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Get content list
+	 *
+	 * @access	public
+	 * @return	json
+	 */
+	  
+    function sort_content($order_by = NULL, $order_direction = 'ASC')
+	{
+		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
+		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
+		
+		echo json_encode($this->content_model->list_content('', '', '', '', $order_by, $order_direction));	
 	}
 	
 	// ------------------------------------------------------------------------
