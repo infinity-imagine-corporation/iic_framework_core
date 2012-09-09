@@ -129,7 +129,7 @@ class IIC_Model extends MY_Model {
     {
         $this->db->insert($this->table['main'], $data);
 		
-		return TRUE;
+		return $this->db->insert_id();
     }
     
     // ------------------------------------------------------------------------
@@ -161,13 +161,10 @@ class IIC_Model extends MY_Model {
     
     function delete_content($id)
     {       
-        for($loop = 0; $loop < count($id); $loop++)
-        {
-            $this->db->where('id', $id[$loop]);
-            $this->db->delete($this->table['main']);
-        }
+        $this->db->where_in('id', $id);
+        $this->db->delete($this->table['main']);
 		
-		return TRUE;
+		return $this->db->affected_rows();
     }	
 	
 	// ------------------------------------------------------------------------

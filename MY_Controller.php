@@ -178,7 +178,13 @@ class IIC_Controller extends MX_Controller {
 	 
 	function delete_content()
 	{
-		$this->content_model->delete_content($this->input->post('id'));
+		$_return = $this->content_model->delete_content($this->input->post('id'));
+		
+		if(is_int($_return))
+		{
+			$this->output->set_status_header('200');	
+			echo 'Deleted '.$_return.' row(s).';
+		}
 	}
 	
 	// ------------------------------------------------------------------------
