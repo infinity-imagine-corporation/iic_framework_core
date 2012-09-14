@@ -57,7 +57,16 @@ class IIC_Controller extends MX_Controller {
 	
 	function get_content($id)
 	{
-		return json_encode($this->content_model->get_content($id));
+		$_is_content_exists = $this->content_model->get_content(array('id' => $id));
+		
+		if($_is_content_exists == 1)
+		{
+			echo json_encode($this->content_model->get_content($id));
+		}
+		else 
+		{
+			$this->output->set_status_header('204');	
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -174,11 +183,19 @@ class IIC_Controller extends MX_Controller {
 	 * Delete content 
 	 *
 	 * @access	public
+	 * @param	array|int	$id
 	 */
 	 
-	function delete_content()
+	function delete_content($id = NULL)
 	{
-		$_return = $this->content_model->delete_content($this->input->post('id'));
+		$id = (is_null($id)) ? $this->input->post('id') : $id;
+		
+		if( ! is_array($id))
+		{
+			$id = array(0 => $id);
+		}
+		
+		$_return = $this->content_model->delete_content($id);
 		
 		if(is_int($_return))
 		{
@@ -228,5 +245,5 @@ class IIC_Controller extends MX_Controller {
 }
 
 
-/* End of file IIC_Controller.php */
-/* Location: ./system/core/IIC_Controller.php */
+/* End of file MY_Controller.php */
+/* Location: ./system/core/MY_Controller.php */
