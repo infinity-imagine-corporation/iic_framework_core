@@ -148,15 +148,42 @@ class IIC_Controller extends MX_Controller {
 	 * Create content 
 	 *
 	 * @access	public
+	 * @param	array	$data
 	 */
 	
-	function create_content()
-	{		
-		$_data = $this->input->post();
+	function create_content($data = NULL)
+	{
+		$_data = NULL;
 		
-		unset($_data['id']);
-				 
-		$this->content_model->create_content($_data);
+		if(is_array($data))	
+		{
+			$_data = $data;
+		}
+		elseif($this->input->post()) 
+		{
+			$_data = $this->input->post();
+		}
+			
+		if(isset($_data['id']))
+		{
+			unset($_data['id']);
+		} 
+		
+		if(is_null($_data))
+		{
+			$this->output->set_status_header('204');
+		}
+		else 
+		{
+			$_result = $this->content_model->create_content($_data);
+			
+			if(is_int($_result))
+			{
+				$this->output->set_status_header('201');	
+				echo $_result;
+				return $_result;
+			}
+		}	 
 	}
 	
 	// ------------------------------------------------------------------------
