@@ -61,7 +61,9 @@ class IIC_Controller extends MX_Controller {
 		
 		if($_is_content_exists == 1)
 		{
-			echo json_encode($this->content_model->get_content($id));
+			$_result = $this->content_model->get_content($id);
+			echo json_encode($_result);
+			return $_result;
 		}
 		else 
 		{
