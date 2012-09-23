@@ -317,7 +317,7 @@ class IIC_Controller extends MX_Controller {
 	function get_content_selectbox_option($selected = NULL)
 	{
 		$_option = '';
-		$_group = $this->content_model->list_content(25, 0, NULL, NULL, 'name');
+		$_group = $this->content_model->list_content(1000, 0, NULL, NULL, 'name');
 		
 		foreach($_group as $_data)
 		{
