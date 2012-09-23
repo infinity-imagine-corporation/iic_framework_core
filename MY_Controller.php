@@ -159,10 +159,23 @@ class IIC_Controller extends MX_Controller {
 	 */
 	  
 	function search_content()
-	{		
+	{
 		$_data = $this->input->post();
 		
-		$_where = array($_data['criteria'].' LIKE' => '%'.$_data['keyword'].'%');
+		//$_where = ($this->input->post('where')) ? $this->input->post('where') : array();
+		foreach ($this->input->post('where') as $key => $value) 
+		{
+			if($value == '')
+			{
+				$_where[$key.' LIKE'] = '%'.$value.'%';
+			}
+			else 
+			{
+				$_where[$key] = $value;
+			}
+		}
+		
+		$_where[$_data['criteria'].' LIKE'] = '%'.$_data['keyword'].'%';
 		
 		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where));
 		
