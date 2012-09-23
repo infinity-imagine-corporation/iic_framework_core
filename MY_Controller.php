@@ -162,7 +162,9 @@ class IIC_Controller extends MX_Controller {
 	{		
 		$_data = $this->input->post();
 		
-		$_result = $this->reformat_content($this->content_model->search_content($_data['keyword'], $_data['criteria']));
+		$_where = array($_data['criteria'].' LIKE' => '%'.$_data['keyword'].'%');
+		
+		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where));
 		
 		echo json_encode($_result);	
 	}
