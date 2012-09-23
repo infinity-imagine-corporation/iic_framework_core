@@ -144,7 +144,24 @@ class IIC_Controller extends MX_Controller {
 		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
 		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
 		
-		$_result = $this->reformat_content($this->content_model->list_content('', '', '', '', $order_by, $order_direction));
+		$_where = array();
+		
+		if($this->input->post('where'))
+		{
+			foreach ($this->input->post('where') as $key => $value) 
+			{
+				if($value == '')
+				{
+					$_where[$key.' LIKE'] = '%'.$value.'%';
+				}
+				else 
+				{
+					$_where[$key] = $value;
+				}
+			}
+		}
+		
+		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where, $order_by, $order_direction));
 		
 		echo json_encode($_result);	
 	}
@@ -162,16 +179,18 @@ class IIC_Controller extends MX_Controller {
 	{
 		$_data = $this->input->post();
 		
-		//$_where = ($this->input->post('where')) ? $this->input->post('where') : array();
-		foreach ($this->input->post('where') as $key => $value) 
+		if($this->input->post('where'))
 		{
-			if($value == '')
+			foreach ($this->input->post('where') as $key => $value) 
 			{
-				$_where[$key.' LIKE'] = '%'.$value.'%';
-			}
-			else 
-			{
-				$_where[$key] = $value;
+				if($value == '')
+				{
+					$_where[$key.' LIKE'] = '%'.$value.'%';
+				}
+				else 
+				{
+					$_where[$key] = $value;
+				}
 			}
 		}
 		
