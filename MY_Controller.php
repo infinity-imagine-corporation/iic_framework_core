@@ -63,7 +63,6 @@ class IIC_Controller extends MX_Controller {
 		{
 			$_result = $this->content_model->get_content($id);
 			echo json_encode($_result);
-			return $_result;
 		}
 		else 
 		{
@@ -121,9 +120,24 @@ class IIC_Controller extends MX_Controller {
 		$limit = ($this->input->post('limit')) ? $this->input->post('limit') : $limit;
 		$offset = ($this->input->post('offset')) ? $this->input->post('offset') : $offset;
 		$select = ($this->input->post('select')) ? $this->input->post('select') : $select;
-		$where = ($this->input->post('where')) ? $this->input->post('where') : $where;
+		//$where = ($this->input->post('where')) ? $this->input->post('where') : $where;
 		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
 		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
+		
+		if($this->input->post('where'))
+		{
+			foreach ($this->input->post('where') as $key => $value) 
+			{
+				if($value == '')
+				{
+					$where[$key.' LIKE'] = '%'.$value.'%';
+				}
+				else 
+				{
+					$where[$key] = $value;
+				}
+			}
+		}
 		
 		$_result = $this->reformat_content($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));
 		
