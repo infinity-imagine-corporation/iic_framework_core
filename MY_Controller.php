@@ -93,6 +93,23 @@ class IIC_Controller extends MX_Controller {
 	// ------------------------------------------------------------------------
 	
 	/**
+	 * Reformat content
+	 * 
+	 * for reformat content before send to user 
+	 * use in list_content, sort_content, search_content
+	 *
+	 * @access	public
+	 * @param	array	$content
+	 */
+	
+	function reformat_content($content)
+	{
+		return $content;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	/**
 	 * Get content list
 	 *
 	 * @access	public
@@ -108,7 +125,9 @@ class IIC_Controller extends MX_Controller {
 		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
 		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
 		
-		echo json_encode($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));	
+		$_result = $this->reformat_content($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));
+		
+		echo json_encode($_result);	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -125,7 +144,9 @@ class IIC_Controller extends MX_Controller {
 		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
 		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
 		
-		echo json_encode($this->content_model->list_content('', '', '', '', $order_by, $order_direction));	
+		$_result = $this->reformat_content($this->content_model->list_content('', '', '', '', $order_by, $order_direction));
+		
+		echo json_encode($_result);	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -141,7 +162,9 @@ class IIC_Controller extends MX_Controller {
 	{		
 		$_data = $this->input->post();
 		
-		echo json_encode($this->content_model->search_content($_data['keyword'], $_data['criteria']));	
+		$_result = $this->reformat_content($this->content_model->search_content($_data['keyword'], $_data['criteria']));
+		
+		echo json_encode($_result);	
 	}
 	
 	// ------------------------------------------------------------------------
