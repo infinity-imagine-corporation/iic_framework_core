@@ -57,11 +57,11 @@ class IIC_Controller extends MX_Controller {
 	
 	function get_content($id)
 	{
-		$_is_content_exists = $this->content_model->get_content(array('id' => $id));
+		$_result = $this->content_model->get_content($id);
 		
-		if($_is_content_exists == 1)
+		if(count($_result) > 0)
 		{
-			$_result = $this->content_model->get_content($id);
+			//$_result = $this->content_model->get_content($id);
 			echo json_encode($_result);
 		}
 		else 
@@ -189,9 +189,10 @@ class IIC_Controller extends MX_Controller {
 	 * @return	json
 	 */
 	  
-	function search_content()
+	function search_content($criteria = NULL, $keyword = NULL)
 	{
-		$_data = $this->input->post();
+		$criteria = ($this->input->post('criteria')) ? $this->input->post('criteria') : $criteria;
+		$keyword = ($this->input->post('keyword')) ? $this->input->post('keyword') : $keyword;
 		
 		if($this->input->post('where'))
 		{
@@ -208,11 +209,19 @@ class IIC_Controller extends MX_Controller {
 			}
 		}
 		
-		$_where[$_data['criteria'].' LIKE'] = '%'.$_data['keyword'].'%';
+		$_where[$criteria.' LIKE'] = '%'.$keyword.'%';
 		
 		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where));
 		
-		echo json_encode($_result);	
+		if(is_array($_result))
+		{
+			echo json_encode($_result);	
+		}
+		else 
+		{
+			$this->output->set_status_header('500');	
+			echo json_encode($_result);	
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -265,16 +274,35 @@ class IIC_Controller extends MX_Controller {
 	 * Update content 
 	 *
 	 * @access	public
+	 * @param	array	$data - array of data to update
 	 */
 	
-	function update_content()
+	function update_content($data = NULL)
 	{
-		$_data = $this->input->post();
+		$_data = (is_null($data)) ? $this->input->post() : $data;
 		$_id = $_data['id'];
 		
 		unset($_data['id']);
+		
+		if(is_null($_data))
+		{
+			$this->output->set_status_header('204');	
+		}
+		else 
+		{
+			$_result = $this->content_model->update_content($_id, $_data);
+		
+			if($_result)
+			{
+				echo 'Updated';
+			}
+			else 
+			{
+				$this->output->set_status_header('204');	
+				echo 'Update failed';
+			}
+		}
 				 
-		$this->content_model->update_content($_id, $_data);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -300,7 +328,7 @@ class IIC_Controller extends MX_Controller {
 		if(is_int($_return))
 		{
 			$this->output->set_status_header('200');	
-			echo 'Deleted '.$_return.' row(s).';
+			echo 'Deleted '.$_return.' row(s)';
 		}
 	}
 	

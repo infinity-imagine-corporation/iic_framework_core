@@ -94,7 +94,14 @@ class IIC_Model extends MY_Model {
 		      
         $_query = $this->db->get($this->table['main'], $limit, $offset);
         
-        return $_query->result_array();
+		if(is_object($_query))
+		{
+			return $_query->result_array();
+		}
+		else 
+		{
+			return 'Database error: '.mysql_errno().' - '.mysql_error();
+		}
     }
     
     // ------------------------------------------------------------------------
@@ -113,7 +120,14 @@ class IIC_Model extends MY_Model {
         $this->db->like($criteria, $keyword);
         $_query = $this->db->get($this->table['main'], $limit, $offset);
         
-        return $_query->result_array();
+		if(is_object($_query))
+		{
+			return $_query->result_array();
+		}
+		else 
+		{
+			return 'Database error: '.mysql_errno().' - '.mysql_error();
+		}
     }   
     
     // ------------------------------------------------------------------------
@@ -123,6 +137,7 @@ class IIC_Model extends MY_Model {
      *
      * @access  public
      * @param   array   $data   
+	 * @return	int		PK of created content
      */
     
     function create_content($data)
@@ -140,6 +155,7 @@ class IIC_Model extends MY_Model {
      * @access  public
      * @param   int     $id     
      * @param   array   $data   
+	 * @return	bool
      */
     
     function update_content($id, $data)
@@ -147,7 +163,7 @@ class IIC_Model extends MY_Model {
         $this->db->where('id', $id);
         $_query = $this->db->update($this->table['main'], $data);
 		
-		return TRUE;
+		return $_query;
     }
     
     // ------------------------------------------------------------------------
