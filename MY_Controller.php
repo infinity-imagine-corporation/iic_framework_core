@@ -52,7 +52,7 @@ class IIC_Controller extends MX_Controller {
 	 *
 	 * @access	public
 	 * @param 	integer	$id
-	 * @return	json
+	 * @return	array
 	 */
 	
 	function get_content($id)
@@ -61,8 +61,8 @@ class IIC_Controller extends MX_Controller {
 		
 		if(count($_result) > 0)
 		{
-			//$_result = $this->content_model->get_content($id);
 			echo json_encode($_result);
+			return $_result;
 		}
 		else 
 		{
@@ -112,7 +112,7 @@ class IIC_Controller extends MX_Controller {
 	 * Get content list
 	 *
 	 * @access	public
-	 * @return	json
+	 * @return	array
 	 */
 	  
     function list_content($limit = 25, $offset = 0, $select = NULL, $where = NULL, $order_by = NULL, $order_direction = 'ASC')
@@ -141,7 +141,8 @@ class IIC_Controller extends MX_Controller {
 		
 		$_result = $this->reformat_content($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));
 		
-		echo json_encode($_result);	
+		echo json_encode($_result);
+		return $_result;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -150,7 +151,7 @@ class IIC_Controller extends MX_Controller {
 	 * Get content list
 	 *
 	 * @access	public
-	 * @return	json
+	 * @return	array
 	 */
 	  
     function sort_content($order_by = NULL, $order_direction = 'ASC')
@@ -178,6 +179,7 @@ class IIC_Controller extends MX_Controller {
 		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where, $order_by, $order_direction));
 		
 		echo json_encode($_result);	
+		return $_result;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -186,7 +188,7 @@ class IIC_Controller extends MX_Controller {
 	 * Search content list
 	 *
 	 * @access	public
-	 * @return	json
+	 * @return	array
 	 */
 	  
 	function search_content($criteria = NULL, $keyword = NULL)
@@ -216,11 +218,12 @@ class IIC_Controller extends MX_Controller {
 		if(is_array($_result))
 		{
 			echo json_encode($_result);	
+			return $_result;
 		}
 		else 
 		{
 			$this->output->set_status_header('500');	
-			echo json_encode($_result);	
+			echo $_result;	
 		}
 	}
 	

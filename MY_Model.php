@@ -30,7 +30,7 @@ class IIC_Model extends MY_Model {
      */
     
     protected $table = array(
-    							'main'		=> 'content'
+    							'main' => 'content'
 							);
     
     // ------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class IIC_Model extends MY_Model {
     function list_content($limit = 25, $offset = 0, $select = NULL, $where = NULL, $order_by = NULL, $order_direction = 'ASC')
     {
     	// Select
-    	if($select != '')
+    	if( ! is_null($select))
 		{
 			$this->db->select($select);
 		}  
@@ -220,9 +220,7 @@ class IIC_Model extends MY_Model {
 	
 	function empty_content()
 	{		
-		$this->db->empty_table($this->table['main']);
-		
-		return TRUE;
+		return $this->db->empty_table($this->table['main']);;
 	}
 
     // ------------------------------------------------------------------------
