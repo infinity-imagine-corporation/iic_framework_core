@@ -332,6 +332,8 @@ class IIC_Controller extends MX_Controller {
 		{
 			$this->output->set_status_header('200');	
 			echo 'Deleted '.$_return.' row(s)';
+			
+			return $_return;
 		}
 	}
 	
