@@ -115,15 +115,13 @@ class IIC_Controller extends MX_Controller {
 	 * @return	array
 	 */
 	  
-    function list_content($limit = 25, $offset = 0, $select = NULL, $where = NULL, $order_by = NULL, $order_direction = 'ASC')
+    function list_content($limit = 25, $offset = 0, $select = NULL, 
+    					  $where = NULL, $order_by = NULL, $order_direction = 'ASC')
 	{
 		$limit = ($this->input->post('limit')) ? $this->input->post('limit') : $limit;
 		$offset = ($this->input->post('offset')) ? $this->input->post('offset') : $offset;
 		$select = ($this->input->post('select')) ? $this->input->post('select') : $select;
-		//$where = ($this->input->post('where')) ? $this->input->post('where') : $where;
-		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
-		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
-		
+
 		if($this->input->post('where'))
 		{
 			foreach ($this->input->post('where') as $key => $value) 
@@ -138,10 +136,21 @@ class IIC_Controller extends MX_Controller {
 				}
 			}
 		}
+
+		$order_by = ($this->input->post('order_by')) 
+					 ? $this->input->post('order_by') 
+					 : $order_by;
+
+		$order_direction = ($this->input->post('order_direction')) 
+							? $this->input->post('order_direction') 
+							: $order_direction;
 		
-		$_result = $this->reformat_content($this->content_model->list_content($limit, $offset, $select, $where, $order_by, $order_direction));
+        // Reformat_content
+		$_result = $this->content_model
+                        ->list_content($limit, $offset, $select, $where, $order_by, $order_direction);
 		
-		echo json_encode($_result);
+		echo json_encode($this->reformat_content($_result));
+
 		return $_result;
 	}
 	
@@ -151,13 +160,20 @@ class IIC_Controller extends MX_Controller {
 	 * Get content list
 	 *
 	 * @access	public
+     * @param   string $order_by database's field name
+     * @param   string $order_direction ASC | DESC
 	 * @return	array
 	 */
 	  
     function sort_content($order_by = NULL, $order_direction = 'ASC')
 	{
-		$order_by = ($this->input->post('order_by')) ? $this->input->post('order_by') : $order_by;
-		$order_direction = ($this->input->post('order_direction')) ? $this->input->post('order_direction') : $order_direction;
+		$order_by = ($this->input->post('order_by')) 
+                     ? $this->input->post('order_by') 
+                     : $order_by;
+
+		$order_direction = ($this->input->post('order_direction')) 
+                            ? $this->input->post('order_direction') 
+                            : $order_direction;
 		
 		$_where = array();
 		
@@ -176,10 +192,21 @@ class IIC_Controller extends MX_Controller {
 			}
 		}
 		
-		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where, $order_by, $order_direction));
-		
-		echo json_encode($_result);	
-		return $_result;
+		$_result = $this->content_model
+                        ->list_content('', '', '', $_where, $order_by, $order_direction);
+        $_json_result = $this->reformat_content($_result);
+        
+        if(is_array($_result))
+        {
+            echo json_encode($_json_result);    
+
+            return $_result;
+        }
+        else 
+        {
+            $this->output->set_status_header('500');    
+            echo $_json_result; 
+        }
 	}
 	
 	// ------------------------------------------------------------------------
@@ -188,6 +215,8 @@ class IIC_Controller extends MX_Controller {
 	 * Search content list
 	 *
 	 * @access	public
+     * @param   string $criteria database's field name
+     * @param   string $keyword word to find
 	 * @return	array
 	 */
 	  
@@ -213,17 +242,19 @@ class IIC_Controller extends MX_Controller {
 		
 		$_where[$criteria.' LIKE'] = '%'.$keyword.'%';
 		
-		$_result = $this->reformat_content($this->content_model->list_content('', '', '', $_where));
+		$_result = $this->content_model->list_content('', '', '', $_where);
+        $_json_result = $this->reformat_content($_result);
 		
 		if(is_array($_result))
 		{
-			echo json_encode($_result);	
+			echo json_encode($_json_result);	
+
 			return $_result;
 		}
 		else 
 		{
 			$this->output->set_status_header('500');	
-			echo $_result;	
+			echo $_json_result;	
 		}
 	}
 	
