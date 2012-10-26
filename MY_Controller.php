@@ -269,21 +269,7 @@ class IIC_Controller extends MX_Controller {
 	
 	function create_content($data = NULL)
 	{
-		$_data = NULL;
-		
-		if(is_array($data))	
-		{
-			$_data = $data;
-		}
-		elseif($this->input->post()) 
-		{
-			$_data = $this->input->post();
-		}
-			
-		if(isset($_data['id']))
-		{
-			unset($_data['id']);
-		} 
+        $_data = (is_null($data)) ? $this->input->post() : $data;
 		
 		if(is_null($_data))
 		{
@@ -291,6 +277,11 @@ class IIC_Controller extends MX_Controller {
 		}
 		else 
 		{
+            if(isset($_data['id']))
+            {
+                unset($_data['id']);
+            } 
+            
 			$_result = $this->content_model->create_content($_data);
 			
 			if(is_int($_result))
