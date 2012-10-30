@@ -59,7 +59,7 @@ class IIC_Controller extends MX_Controller {
 	{
 		$_result = $this->content_model->get_content($id);
 		
-		if(count($_result) > 0)
+		if (count($_result) > 0)
 		{
 			echo json_encode($_result);
 			return $_result;
@@ -177,11 +177,11 @@ class IIC_Controller extends MX_Controller {
 		
 		$_where = array();
 		
-		if($this->input->post('where'))
+		if ($this->input->post('where'))
 		{
 			foreach ($this->input->post('where') as $key => $value) 
 			{
-				if($value == '')
+				if ($value == '')
 				{
 					$_where[$key.' LIKE'] = '%'.$value.'%';
 				}
@@ -196,7 +196,7 @@ class IIC_Controller extends MX_Controller {
                         ->list_content('', '', '', $_where, $order_by, $order_direction);
         $_json_result = $this->reformat_content($_result);
         
-        if(is_array($_result))
+        if (is_array($_result))
         {
             echo json_encode($_json_result);    
 
@@ -225,11 +225,11 @@ class IIC_Controller extends MX_Controller {
 		$criteria = ($this->input->post('criteria')) ? $this->input->post('criteria') : $criteria;
 		$keyword = ($this->input->post('keyword')) ? $this->input->post('keyword') : $keyword;
 		
-		if($this->input->post('where'))
+		if ($this->input->post('where'))
 		{
 			foreach ($this->input->post('where') as $key => $value) 
 			{
-				if($value == '')
+				if ($value == '')
 				{
 					$_where[$key.' LIKE'] = '%'.$value.'%';
 				}
@@ -245,7 +245,7 @@ class IIC_Controller extends MX_Controller {
 		$_result = $this->content_model->list_content('', '', '', $_where);
         $_json_result = $this->reformat_content($_result);
 		
-		if(is_array($_result))
+		if (is_array($_result))
 		{
 			echo json_encode($_json_result);	
 
@@ -271,20 +271,20 @@ class IIC_Controller extends MX_Controller {
 	{
         $_data = (is_null($data)) ? $this->input->post() : $data;
 		
-		if(is_null($_data))
+		if (is_null($_data))
 		{
 			$this->output->set_status_header('204');
 		}
 		else 
 		{
-            if(isset($_data['id']))
+            if (isset($_data['id']))
             {
                 unset($_data['id']);
             } 
             
 			$_result = $this->content_model->create_content($_data);
 			
-			if(is_int($_result))
+			if (is_int($_result))
 			{
 				$this->output->set_status_header('201');	
 				echo $_result;
@@ -305,29 +305,34 @@ class IIC_Controller extends MX_Controller {
 	function update_content($data = NULL)
 	{
 		$_data = (is_null($data)) ? $this->input->post() : $data;
-		$_id = $_data['id'];
 		
-		unset($_data['id']);
-		
-		if(is_null($_data))
+		if (is_null($_data) || count($_data) == 0)
 		{
 			$this->output->set_status_header('204');	
+			echo 'No Content';
+			return;
 		}
 		else 
 		{
+			$_id = $_data['id'];
+			unset($_data['id']);
+
 			$_result = $this->content_model->update_content($_id, $_data);
 		
-			if($_result)
+			if ($_result)
 			{
-				echo 'Updated';
+				$_message = 'Updated';
 			}
 			else 
 			{
 				$this->output->set_status_header('204');	
-				echo 'Update failed';
+				$_message = 'Update failed';
 			}
+
+			echo $_message;
+
+			return $_message;
 		}
-				 
 	}
 	
 	// ------------------------------------------------------------------------
@@ -343,14 +348,14 @@ class IIC_Controller extends MX_Controller {
 	{
 		$id = (is_null($id)) ? $this->input->post('id') : $id;
 		
-		if( ! is_array($id))
+		if ( ! is_array($id))
 		{
 			$id = array(0 => $id);
 		}
 		
 		$_return = $this->content_model->delete_content($id);
 		
-		if(is_int($_return))
+		if (is_int($_return))
 		{
 			$this->output->set_status_header('200');	
 			echo 'Deleted '.$_return.' row(s)';
